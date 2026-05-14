@@ -2,31 +2,31 @@
 
 Author: [@dayanegosha](https://github.com/dayanegosha)
 
-What you get here: **`stl/X220_USB_C_adapter.stl`** (ready to print), this **README**, and **`src/adapter.py`** if you want to change numbers and build a new STL yourself. Nothing else is required to use the model.
+**English.** A printable replacement **housing** for the ThinkPad **X220** palmrest **DC power jack**. It accepts a small **USB-C PD trigger board** (PDC004 family) so you can power the laptop from a **USB-C charger at 20 V**. The design is **power-only** (no USB data). The repo ships a ready-made **[`stl/X220_USB_C_adapter.stl`](stl/X220_USB_C_adapter.stl)**, this README, and **[`src/adapter.py`](src/adapter.py)** to tweak dimensions and regenerate the mesh.
+
+**Русский.** **Печатаемая деталь** — **замена корпуса** **цилиндрического разъёма питания** в **верхней крышке с клавиатурой (palmrest)** ноутбука **ThinkPad X220**. Внутрь устанавливается компактная плата **USB-C PD-триггера** (семейство **PDC004**): ноутбук получает **20 В** от обычного **USB-C**-зарядного устройства по протоколу **Power Delivery**. **По USB передаётся только питание**, линии данных не используются — по смыслу то же, что и у штатного круглого разъёма. В репозитории лежат готовый **[`stl/X220_USB_C_adapter.stl`](stl/X220_USB_C_adapter.stl)**, этот README и **[`src/adapter.py`](src/adapter.py)** — для правки размеров и **повторного экспорта** STL.
 
 ---
 
 ## Just want to print it?
 
-You do not have to read the rest of this file.
-
 1. Download [`stl/X220_USB_C_adapter.stl`](stl/X220_USB_C_adapter.stl).
-2. Print it in **PETG** or **ABS** (PLA works but softens sooner when the board gets warm).
-3. Put the **flat open pocket** on the build plate so the USB-C slot prints lying down — no supports needed.
-4. Buy a **PDC004** (or PDC004-20V style) USB-C PD trigger board with the usual WITRN-sized PCB (~16.3 × 10.2 mm), solder your X220 DC cable to it, slide the board in from the back, glue or pot the wires if you like, and clip it into the palmrest like the original yellow jack.
+2. Print in **PETG** or **ABS** (PLA is possible but softens earlier when the board warms up).
+3. Place the part with the **open board pocket flat on the bed** so the **USB-C slot lies horizontally** — **supports off**.
+4. Use a **PDC004** (or equivalent) trigger board in the common **~16.3 × 10.2 mm** “WITRN-style” footprint, solder the **X220 DC cable** to the board outputs, insert the board **from the front**, optionally glue or pot the rear, and clip the assembly into the palmrest like the original yellow jack body.
 
-If anything is tight or loose, open `src/adapter.py`, tweak the constants at the top, and run [Rebuild](#rebuild).
+If fit is tight or loose, edit the constants at the top of `src/adapter.py` and run [Rebuild](#rebuild).
 
 ---
 
 ## Technical drawings (PNG)
 
-Images in `docs/`:
+In [`docs/`](docs/):
 
 - [`drawing_views.png`](docs/drawing_views.png) — six orthographic views  
-- [`drawing_isometric.png`](docs/drawing_isometric.png) — two isometrics  
+- [`drawing_isometric.png`](docs/drawing_isometric.png) — two isometric views  
 
-*(This repo does not ship camera photos of the printed part; add your own under `docs/` if you want them in a fork.)*
+There are **no bundled photos** of a printed sample; you can add your own images under `docs/` in a fork if you like.
 
 ---
 
@@ -42,63 +42,63 @@ Images in `docs/`:
 
 ## What this is
 
-A small **3D-printable housing** for the ThinkPad **X220** (and similar) palmrest **DC jack slot**. It holds a **USB-C PD trigger board** (PDC004 family) so you can use a normal **USB-C charger** at **20 V**. **No USB data** — only power, like the original round jack.
+This project is a **parametric 3D-printed shell** that fits the **X220 palmrest DC jack opening** and holds a **USB-C PD decoy/trigger PCB** so the machine negotiates **20 V PD** from a standard USB-C supply. You **reuse the laptop’s DC harness and motherboard connector**; only the **yellow plastic jack shell** is replaced by this print plus the trigger board.
 
-You keep the **original cable and motherboard plug**; you replace the yellow plastic jack body and solder the wires to the trigger board.
+Typical boards are **PDC004** or close clones; always match **board outline and pinout** to your seller’s datasheet.
 
-## Outer size (from `adapter.py`)
+## Outer dimensions (from `adapter.py`)
 
 | | |
 | --- | ---: |
 | Width × height (X × Z) | **12.0 × 9.7 mm** |
-| Depth into laptop (rectangular slug) | **11.2 mm** |
-| Extra plastic on the ring side only | **+0.7 mm** |
-| Ring | **Ø9.7 mm**, **1.0 mm** proud of the front face |
-| Rough length nose tip → back | **~12.2 mm** |
-| USB-C cutout in the print (with clearance) | **9.16 × 3.36 mm** (corner radius 1.6 mm) |
-| Pocket for the board (approx.) | **10.35 × ~11.8 × 4.55 mm** |
+| Depth into laptop (rectangular insert) | **11.2 mm** |
+| Extra material on ring side only | **+0.7 mm** |
+| Front ring | **Ø9.7 mm**, **1.0 mm** above the front face |
+| Approx. length, nose tip → rear | **~12.2 mm** |
+| USB-C opening in print (with clearance) | **9.16 × 3.36 mm** (corner radius **1.6 mm**) |
+| Board pocket (approx.) | **10.35 × ~11.8 × 4.55 mm** |
 
 ## Bill of materials
 
 | Qty | Item |
 | ---: | --- |
-| 1 | **PDC004** (or clone) ~**16.3 × 10.2 × 1.0 mm** PCB — check the seller’s drawing |
+| 1 | **PDC004-class** USB-C PD trigger PCB, about **16.3 × 10.2 × 1.0 mm** — verify against the seller drawing |
 | 1 | [`stl/X220_USB_C_adapter.stl`](stl/X220_USB_C_adapter.stl) |
-| 1 | Original X220/X230 **DC harness** |
-| — | Wire, solder, flux, small iron tip, heat-shrink, optional epoxy or hot glue |
+| 1 | Stock **X220 / X230 DC cable** with motherboard plug |
+| — | Wire, solder, flux, fine tip, heat-shrink; optional epoxy or hot-melt for strain relief |
 
-## Print settings (defaults)
+## Recommended print settings
 
 | | |
 | --- | --- |
 | Material | **PETG** or **ABS** |
 | Nozzle | 0.4 mm |
-| Layer | 0.12–0.16 mm |
-| Walls | 3 |
-| Infill | 100 % |
-| Top/bottom | 4 layers each |
+| Layer height | 0.12–0.16 mm |
+| Perimeters | **≥ 3** |
+| Infill | **100 %** |
+| Top / bottom shells | **4** layers each |
 | Supports | **Off** |
-| Orientation | **Open pocket on the bed** — USB slot horizontal |
+| Orientation | **Pocket opening on the build plate**, USB slot **horizontal** |
 
-Thin walls: use a calibrated printer and at least three perimeters.
+Thin walls: calibrate extrusion and use at least three perimeters.
 
-## Assembly (short)
+## Assembly
 
-1. Print; clean the pocket if needed.  
-2. Desolder the old jack from the yellow housing; keep the cable.  
-3. Solder **OUT+** / **OUT−** on the PDC004 like the old jack.  
-4. Slide the board in **front first** until it stops; USB shell lines up with the slot.  
-5. Dry-fit in the chassis.  
-6. Glue or pot the back if you want.  
-7. Close the palmrest.
+1. Print the part; remove stringing and clean the pocket if needed.  
+2. Remove the old jack from the **yellow housing** and keep the **cable**.  
+3. Solder the cable to the trigger board **positive and negative outputs** in the same polarity as the original jack (**OUT+** / **OUT−** or equivalent per your board).  
+4. Slide the PCB in **front edge first** until it seats; the USB-C shell should align with the slot in the print.  
+5. Dry-fit in the palmrest before final fastening.  
+6. Optionally glue or pot the rear for mechanical relief.  
+7. Reinstall the palmrest.
 
-**ID wire:** if you get “non-genuine battery” or slow charge, a **10 kΩ resistor from ID to ground** on the board side often fixes it.
+**Center pin / ID:** if the machine reports a non-genuine battery or charges slowly, a **10 kΩ resistor from the ID sense line to ground** on the board side (when the board exposes such a pad) often resolves it—follow your specific PCB documentation.
 
 ## Charger safety
 
-Use a **65 W+** USB-C PD brick that is **known good** for ThinkPad mods (e.g. lists in [mikepdiy/thinkpad-mod](https://github.com/mikepdiy/thinkpad-mod)). Avoid bad adapters that can send 20 V before negotiation.
+Use a **65 W or higher** USB-C **PD** adapter that is **known to be safe** for ThinkPad barrel mods (community-maintained lists exist, e.g. [mikepdiy/thinkpad-mod](https://github.com/mikepdiy/thinkpad-mod)). Avoid unknown or out-of-spec bricks that might present hazardous voltages.
 
-## Repo layout
+## Repository layout
 
 ```
 thinkpad-x220-usb-c-adapter/
@@ -116,10 +116,10 @@ thinkpad-x220-usb-c-adapter/
 
 ## Rebuild
 
-Only needed if you edit `src/adapter.py`:
+Needed only after editing `src/adapter.py`:
 
 ```bash
-cd thinkpad-x220-usb-c-adapter   # or your path
+cd thinkpad-x220-usb-c-adapter   # or your clone path
 python3 -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
@@ -130,36 +130,96 @@ python src/adapter.py            # writes stl/X220_USB_C_adapter.stl
 
 # Русский
 
-## Что это
+## О проекте
 
-Корпус под разъём питания в паз palmrest **ThinkPad X220**. Плата **PDC004**, питание с **USB-C PD 20 В**. **Данных по USB нет** — только питание.
+Это **параметризуемая 3D-печатная оболочка** под стандартное **гнездо разъёма питания** в **palmrest ThinkPad X220**. Она удерживает плату **USB-C PD-триггера** (часто называют **PDC004** или аналоги), чтобы ноутбук **договорился о 20 В** по протоколу **USB Power Delivery** с обычного USB-C блока питания. **Штатный жгут с разъёмом на материнскую плату сохраняется**; вместо **жёлтого пластикового корпуса штекера** ставятся эта деталь и плата триггера.
 
-Жгут с материнки оставляем, меняем жёлтую оболочку разъёма и припаиваемся к PDC004.
+Перед покупкой платы сверяйте **габариты и распиновку** с чертежом продавца — у клонов они могут отличаться.
 
-## Размеры
+## Основные размеры (из `adapter.py`)
 
-Те же числа, что в таблице выше (из `adapter.py`).
+| | |
+| --- | ---: |
+| Ширина × высота (оси X × Z) | **12,0 × 9,7 мм** |
+| Глубина вставки в корпус (прямоугольный «хвост») | **11,2 мм** |
+| Дополнительный пластик только со стороны кольца | **+0,7 мм** |
+| Переднее кольцо | **Ø9,7 мм**, **1,0 мм** над лицевой плоскостью |
+| Длина примерно от носика до задней грани | **~12,2 мм** |
+| Окно USB-C в детали (с зазорами) | **9,16 × 3,36 мм** (радиус углов **1,6 мм**) |
+| Карман под плату (приблизительно) | **10,35 × ~11,8 × 4,55 мм** |
 
-## Что нужно
+## Комплектация
 
-Плата PDC004, напечатанный STL, родной жгут, провод/пайка/усадка, по желанию клей.
+| Кол-во | Позиция |
+| ---: | --- |
+| 1 | Плата **USB-C PD-триггера** класса **PDC004**, ориентировочно **16,3 × 10,2 × 1,0 мм** — сверяйте с документацией продавца |
+| 1 | Файл [`stl/X220_USB_C_adapter.stl`](stl/X220_USB_C_adapter.stl) |
+| 1 | **Родной силовой жгут** X220 / X230 с разъёмом на материнскую плату |
+| — | Припой, флюс, провод при необходимости, термоусадка; по желанию эпоксидка или клей для фиксации жгута |
 
-## Печать и сборка
+## Рекомендуемые настройки печати
 
-Кратко те же шаги, что в английском разделе: карманом на стол, без поддержек, пайка OUT+/OUT−, провод ID при необходимости через **10 кОм на землю**, зарядки только из проверенных списков.
+| | |
+| --- | --- |
+| Материал | **PETG** или **ABS** |
+| Сопло | 0,4 мм |
+| Высота слоя | 0,12–0,16 мм |
+| Периметры (стенки) | **не менее 3** |
+| Заполнение | **100 %** |
+| Верх / низ | по **4** слоя |
+| Поддержки | **выкл.** |
+| Ориентация на столе | **карманом вниз**, разъём **USB-C горизонтально** |
+
+У детали тонкие стенки: откалибруйте экструзию и не уменьшайте число периметров.
+
+## Сборка
+
+1. Напечатайте деталь, при необходимости очистите карман от нитей и мусора.  
+2. Отпаяйте старый разъём от **жёлтого корпуса** и сохраните **жгут**.  
+3. Припаяйте жгут к выходам платы триггера с **той же полярностью**, что у штатного разъёма (контакты вроде **OUT+** / **OUT−** или по схеме вашей платы).  
+4. Вставьте плату **передним краем вперёд**, пока она не упрётся; металлическая оболочка USB-C должна совпасть с прорезью в пластике.  
+5. Примерьте узел в **palmrest** до окончательной фиксации.  
+6. При необходимости зафиксируйте заднюю часть клеем или заливкой для разгрузки проводов.  
+7. Установите palmrest на место.
+
+**Центральный контакт / ID:** если появляются сообщения о «неродной» батарее или заряд идёт медленно, часто помогает **резистор 10 кОм** между линией **ID** и **общим проводом (землёй)** на стороне платы — ориентируйтесь на документацию именно вашей платы.
+
+## Безопасность и блок питания
+
+Берите **USB-C PD-адаптер не менее ~65 Вт** из **проверенных рекомендаций** для модификаций ThinkPad (например, списки в репозитории [mikepdiy/thinkpad-mod](https://github.com/mikepdiy/thinkpad-mod)). Не используйте сомнительные блоки: при ошибках в PD возможны опасные уровни напряжения.
+
+## Структура репозитория
+
+```
+thinkpad-x220-usb-c-adapter/
+├── LICENSE
+├── README.md
+├── requirements.txt
+├── stl/
+│   └── X220_USB_C_adapter.stl
+├── src/
+│   └── adapter.py          # параметры и экспорт STL
+└── docs/
+    ├── drawing_views.png
+    └── drawing_isometric.png
+```
 
 ## Пересборка STL
 
-Те же команды, что в разделе [Rebuild](#rebuild).
+Нужна только если вы меняете `src/adapter.py`:
+
+```bash
+cd thinkpad-x220-usb-c-adapter   # или путь к вашей копии репозитория
+python3 -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python src/adapter.py            # записывает stl/X220_USB_C_adapter.stl
+```
 
 ---
 
 ## License
 
-Full text: [`LICENSE`](LICENSE) (**MIT**).
+**English.** Full text: [`LICENSE`](LICENSE) (**MIT**). You may **use, modify, print, share, and sell** derivatives; retain the **copyright notice** in copies. Software and models are provided **as-is**; the author is **not liable** for damage or misuse. **Not affiliated with Lenovo.** **ThinkPad** is a trademark of Lenovo.
 
-Short version: you may **use, change, print, share, and sell** this; keep the **copyright line** in copies. Everything is **as-is**; the author is **not liable** for damage. Not affiliated with Lenovo. **ThinkPad** is a Lenovo trademark.
-
----
-
-*Кратко по-русски про лицензию: MIT — можно пользоваться и распространять, строку с копирайтом оставлять, всё «как есть», автор не отвечает за последствия.*
+**Русский.** Полный текст: [`LICENSE`](LICENSE) (**MIT**). Разрешено **использовать, изменять, печатать, распространять и продавать** производные; в копиях нужно **сохранять уведомление об авторских правах**. Материалы поставляются **«как есть»**; автор **не несёт ответственности** за ущерб или неправильное применение. **Проект не связан с Lenovo.** **ThinkPad** — товарный знак Lenovo.
