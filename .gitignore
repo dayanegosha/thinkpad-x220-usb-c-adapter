@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Build artifacts (the checked-in STL is generated from src/adapter.py)
+build/
+dist/
+
+# OS junk
+.DS_Store
+Thumbs.db
