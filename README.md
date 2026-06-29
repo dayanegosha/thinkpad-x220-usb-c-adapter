@@ -1,5 +1,9 @@
 # ThinkPad X220 USB-C power jack housing
 
+<p align="center">
+  <img src="docs/drawing_isometric.png" alt="Isometric views of the X220 USB-C adapter housing" width="640" />
+</p>
+
 Author: [@dayanegosha](https://github.com/dayanegosha)
 
 **English.** A printable replacement **housing** for the ThinkPad **X220** palmrest **DC power jack**. It accepts a small **USB-C PD trigger board** (PDC004 family) so you can power the laptop from a **USB-C charger at 20 V**. The design is **power-only** (no USB data). The repo ships a ready-made **[`stl/X220_USB_C_adapter.stl`](stl/X220_USB_C_adapter.stl)**, this README, and **[`src/adapter.py`](src/adapter.py)** to tweak dimensions and regenerate the mesh.
