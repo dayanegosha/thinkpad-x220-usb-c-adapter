@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/project-card.svg" alt="thinkpad-x220-usb-c-adapter project card" width="100%" /></p>
+
 # ThinkPad X220 USB-C power jack housing
 
 <p align="center">
