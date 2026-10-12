@@ -3,7 +3,7 @@
 # ThinkPad X220 USB-C power jack housing
 
 <p align="center">
-  <img src="https://img.shields.io/badge/STL-ready%20to%20print-orange.svg" alt="Ready-to-print STL" />
+  <img src="https://img.shields.io/badge/STL-printable%20model-orange.svg" alt="Printable STL model" />
   <img src="https://img.shields.io/badge/model-parametric-blue.svg" alt="Parametric model" />
   <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT license" />
 </p>

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="440" viewBox="0 0 1280 440" role="img" aria-labelledby="title desc">
   <title id="title">THINKPAD X220 USB-C project card</title>
-  <desc id="desc">A PARAMETRIC, PRINT-READY POWER ADAPTER</desc>
+  <desc id="desc">A PARAMETRIC USB-C POWER-JACK HOUSING</desc>
   <rect width="1280" height="440" fill="#101820"/>
   <path d="M0 0h18v440H0z" fill="#e35d4f"/>
   <path d="M930 0h350v440H760z" fill="#16232d"/>
@@ -13,7 +13,7 @@
     <text x="74" y="67" fill="#f3efe6" font-size="18" font-weight="700" letter-spacing="3">GEORGE ZHURIK  /  PROJECT FILE 08</text>
     <text x="74" y="205" fill="#f3efe6" font-size="58" font-weight="800" letter-spacing="1">THINKPAD X220 USB-C</text>
     <rect x="74" y="231" width="88" height="5" fill="#e35d4f"/>
-    <text x="74" y="278" fill="#b9c2c9" font-size="21" font-weight="600" letter-spacing="2">A PARAMETRIC, PRINT-READY POWER ADAPTER</text>
+    <text x="74" y="278" fill="#b9c2c9" font-size="21" font-weight="600" letter-spacing="2">A PARAMETRIC USB-C POWER-JACK HOUSING</text>
     <text x="74" y="388" fill="#f3efe6" font-size="17" font-weight="700" letter-spacing="2">PYTHON  /  CAD  /  3D PRINTING</text>
     <text x="1076" y="238" fill="#f3efe6" font-size="70" font-weight="800" text-anchor="middle">08</text>
     <text x="1076" y="274" fill="#e35d4f" font-size="15" font-weight="700" letter-spacing="4" text-anchor="middle">DAYANEGOSHA</text>
