@@ -1,18 +1,8 @@
-"""ThinkPad X220 DC-jack -> USB-C housing tailored to the PDC004-20V trigger.
+"""Корпус USB-C PD trigger PDC004-20V для ThinkPad X220.
 
-Geometry summary
-----------------
-* Rectangular slug **12.0 × 9.7 × 11.2 mm** + cylindrical nose **Ø9.7 × 1.0 mm**
-  matching the X220 chassis pocket and palmrest bezel.
-* The nose tip is flat; the only external cutout is a rounded rectangle for the
-  USB-C female metal shell.
-* Internal pocket matches typical **WITRN PDC004** board dimensions: PCB **16.3 x 10.2 x 1.0 mm**, USB-C cage
-  **9.0 x 3.2 mm**, metal sticks out **1.3 mm** past the PCB edge; opening
-  plane **flush** with the nose tip (``y_tip``). Cage footprint on board **7.3 mm**.
-* The pocket extends past the back face so the long board exits into the base.
-
-All tunable values live in the parameter block below. Run this file to write
-``stl/X220_USB_C_adapter.stl``.
+Размеры заданы в миллиметрах, ось Y направлена внутрь ноутбука.
+Плата выходит за заднюю грань корпуса, разъём расположен заподлицо с носиком.
+Запуск файла сохраняет модель в stl/X220_USB_C_adapter.stl.
 """
 
 from __future__ import annotations
@@ -24,83 +14,71 @@ import numpy as np
 from manifold3d import Manifold, CrossSection
 from stl import mesh as stlmesh
 
+# Посадочное место в ноутбуке
 
-# ---------------------------------------------------------------------------
-# Laptop slot (don't change unless your chassis differs)
-# ---------------------------------------------------------------------------
+HOUSING_W = 12.0          # X, ширина посадочного места
+HOUSING_H = 9.7           # Z, высота посадочного места
+HOUSING_D = 11.2          # Y, глубина посадочного места
 
-HOUSING_W = 12.0          # X — caliper-measured slug width
-HOUSING_H = 9.7           # Z — caliper-measured slug height
-HOUSING_D = 11.2          # Y — caliper-measured slug depth (into laptop; rear face unchanged)
-
-# Extra rectangular slug only on the ring side (-Y), not symmetric +D/2 growth.
-# Fills thin/void wall behind the nose ring without moving pocket or USB plane.
+# Утолщаем стенку со стороны носика (-Y), не сдвигая карман и плоскость разъёма.
 HOUSING_FRONT_EXTENSION_Y = 0.7
 
-# Nose ring: Ø9.7 mm — exactly matches the slug height, so the ring is tangent
-# to the top and bottom faces. 1 mm proud of the front face.
+# Диаметр носика совпадает с высотой корпуса; выступ за переднюю грань — 1 мм.
 NOSE_OD = 9.7
 NOSE_LEN = 1.0
 
-# ---------------------------------------------------------------------------
-# WITRN PDC004 — mechanical (vendor sheet, mm)
-# ---------------------------------------------------------------------------
+# Плата WITRN PDC004, размеры производителя
 
-PCB_W = 10.2              # X — across the laptop
-PCB_L = 16.3              # Y — FR4 only (long edge into laptop)
-PCB_THICK = 1.0           # vendor: 1.0 mm
+PCB_W = 10.2              # X, поперёк ноутбука
+PCB_L = 16.3              # Y, длина самой платы
+PCB_THICK = 1.0           # Толщина платы
 
-# USB-C female metal shell (opening 9 x 3.2)
+# Металлический корпус разъёма USB-C
 USBC_SHELL_W = 9.0
 USBC_SHELL_H = 3.2
-USBC_SHELL_R = 1.60       # capped by min(..., H/2) in polygon helper
+USBC_SHELL_R = 1.60       # Радиус ограничен половиной высоты в rounded_rect_polygon
 
-# PCB front edge -> USB opening plane (vendor: 17.60 total - 16.30 PCB = 1.30)
+# Выступ разъёма за передний край платы: 17,60 − 16,30 = 1,30 мм.
 USBC_SHELL_PAST_PCB = 1.3
 
-# Shift PCB registration toward the nose tip (-Y) so the USB tunnel stays
-# open after pocket CSG (through-hole). Typical -0.10 ... -0.28 mm.
+# Сдвиг платы к носику (-Y) оставляет проход открытым после вычитания кармана.
+# Обычно подходит от -0,10 до -0,28 мм.
 PCB_REGISTER_OFFSET_Y = -0.22
 
-# Front cut must extend past the PCB plane and overlap the pocket subtract (mm).
+# Прорезь должна пересекаться с карманом за передним краем платы.
 APERTURE_MERGE_INTO_POCKET_Y = 0.90
 
-# Pocket starts slightly forward of the PCB front for a clean merged void (mm).
+# Карман начинается перед краем платы, чтобы соединиться с прорезью.
 POCKET_FRONT_OVERLAP_Y = 0.20
 
-# Cage soldered on the PCB behind the opening (vendor top view: 7.30 mm)
+# Длина корпуса разъёма на плате по чертежу производителя.
 USBC_SHELL_ON_PCB_Y = 7.30
 
-# Legacy slack (only used if you switch back to fixed-length aperture mode)
+# Запас для прежнего варианта с фиксированной длиной прорези.
 APERTURE_SLACK_Y = 0.25
 
-# ---------------------------------------------------------------------------
-# Fit clearances (mm) — tune these per printer
-# ---------------------------------------------------------------------------
+# Зазоры для подгонки под принтер
 
-PCB_W_CLEARANCE = 0.15    # total slop in X (≈0.075 mm/side — snug slip fit)
-PCB_T_CLEARANCE = 0.10    # extra vertical slop in the PCB slot
-SHELL_CLEARANCE = 0.16    # extra W and H of the front aperture
-TOP_COMPONENT_CLEAR = 0.30  # above USB-C shell top — leaves room for the lid
+PCB_W_CLEARANCE = 0.15    # Общий зазор по X, примерно 0,075 мм на сторону
+PCB_T_CLEARANCE = 0.10    # Зазор по толщине платы
+SHELL_CLEARANCE = 0.16    # Зазор по ширине и высоте разъёма
+TOP_COMPONENT_CLEAR = 0.30  # Запас над разъёмом под крышку
 
-USBC_RES = 64             # arc segments per 90° corner of the USB-C aperture
-NOSE_SEGMENTS = 256       # segments around the cylindrical nose
+USBC_RES = 64             # Сегменты на четверть дуги прорези
+NOSE_SEGMENTS = 256       # Сегменты окружности носика
 
-
-# ---------------------------------------------------------------------------
-# Derived geometry (auto-computed)
-# ---------------------------------------------------------------------------
+# Расчётные размеры
 
 APERTURE_W = USBC_SHELL_W + SHELL_CLEARANCE
 APERTURE_H = USBC_SHELL_H + SHELL_CLEARANCE
-APERTURE_R = USBC_SHELL_R                          # capped in rounded_rect_polygon
+APERTURE_R = USBC_SHELL_R                          # Радиус ограничивается в rounded_rect_polygon
 
 POCKET_W = PCB_W + PCB_W_CLEARANCE
 
-# Solve the Z stack-up so the USB-C metal shell ends up centred on Z = 0:
+# Совмещаем центр разъёма с Z = 0.
 SHELL_TOP_Z = +USBC_SHELL_H / 2.0
 SHELL_BOT_Z = -USBC_SHELL_H / 2.0
-PCB_TOP_Z = SHELL_BOT_Z                            # top-mount: shell bottom = PCB top
+PCB_TOP_Z = SHELL_BOT_Z                            # Разъём установлен сверху платы
 PCB_BOT_Z = PCB_TOP_Z - PCB_THICK
 
 POCKET_FLOOR_Z = PCB_BOT_Z - PCB_T_CLEARANCE / 2.0
@@ -117,10 +95,7 @@ def _aperture_depth_mm() -> float:
 
 APERTURE_DEPTH_Y = _aperture_depth_mm()
 
-
-# ---------------------------------------------------------------------------
-# Geometry helpers
-# ---------------------------------------------------------------------------
+# Геометрия
 
 def rounded_rect_polygon(width, height, radius, segments=USBC_RES):
     r = min(radius, width / 2.0, height / 2.0)
@@ -141,31 +116,27 @@ def rounded_rect_polygon(width, height, radius, segments=USBC_RES):
 
 
 def rounded_prism(width, height, length, radius, segments=USBC_RES):
-    """Rounded rectangular prism extruded along the Y axis."""
+    """Призма со скруглёнными углами вдоль оси Y."""
     poly = rounded_rect_polygon(width, height, radius, segments)
     solid = Manifold.extrude(CrossSection([poly]), length)
     solid = solid.translate((0.0, 0.0, -length / 2.0))
     solid = solid.rotate((90.0, 0.0, 0.0))
     return solid
 
-
-# ---------------------------------------------------------------------------
-# Build
-# ---------------------------------------------------------------------------
+# Сборка
 
 def build():
-    y_front = -HOUSING_D / 2.0           # -6.00
-    y_tip = y_front - NOSE_LEN           # -7.35  outer face of the nose
-    y_back = +HOUSING_D / 2.0            # +6.00
+    y_front = -HOUSING_D / 2.0
+    y_tip = y_front - NOSE_LEN
+    y_back = +HOUSING_D / 2.0
     y_pcb_front = y_tip + USBC_SHELL_PAST_PCB + PCB_REGISTER_OFFSET_Y
 
-    # Through-slot: length from nose tip past PCB front and into pocket zone.
+    # Прорезь проходит от носика за край платы и соединяется с карманом.
     aperture_len = max(
         NOSE_LEN + 0.55,
         y_pcb_front + APERTURE_MERGE_INTO_POCKET_Y - y_tip,
     )
-    # Body: rectangular slug (rear y = +D/2 fixed; front extends by HOUSING_FRONT_EXTENSION_Y)
-    # + cylindrical nose still jointed at y_front = -D/2 (USB plane / pocket unchanged).
+    # Удлиняем корпус только спереди; носик и карман остаются на месте.
     d_rect = HOUSING_D + HOUSING_FRONT_EXTENSION_Y
     cy_rect = -HOUSING_FRONT_EXTENSION_Y / 2.0
     outer = (
@@ -180,24 +151,23 @@ def build():
         .rotate((90.0, 0.0, 0.0))
         .translate((0.0, y_front, 0.0))
     )
-    # Clip the cylindrical nose to the housing's Z range so its top and bottom
-    # are flush with the slug's top/bottom faces (the OEM "срезано" look).
+    # Срезаем носик сверху и снизу по высоте корпуса.
     nose_clip = (
         Manifold.cube(
             (NOSE_OD + 2.0, NOSE_LEN + 0.4, HOUSING_H),
             center=True,
         ).translate((0.0, y_front - NOSE_LEN / 2.0, 0.0))
     )
-    nose = nose_full ^ nose_clip  # manifold3d: ^ is intersection
+    nose = nose_full ^ nose_clip  # В manifold3d оператор ^ означает пересечение.
 
     body = outer + nose
 
-    # USB-C: rounded slot from nose tip, long enough to merge with the pocket void.
+    # Прорезь USB-C должна соединяться с карманом без перегородки.
     aperture = rounded_prism(APERTURE_W, APERTURE_H, aperture_len, APERTURE_R)
     aperture = aperture.translate((0.0, y_tip + aperture_len / 2.0, 0.0))
 
     pocket_y_start = y_pcb_front - POCKET_FRONT_OVERLAP_Y
-    pocket_y_end = y_back + 0.50                      # punch through the rear
+    pocket_y_end = y_back + 0.50                      # Карман выходит за заднюю грань.
     pocket_len = pocket_y_end - pocket_y_start
     pocket = Manifold.cube((POCKET_W, pocket_len, POCKET_HEIGHT), center=True)
     pocket = pocket.translate(
@@ -206,10 +176,7 @@ def build():
 
     return body - aperture - pocket
 
-
-# ---------------------------------------------------------------------------
-# Export & report
-# ---------------------------------------------------------------------------
+# Экспорт
 
 def export_stl(solid, path):
     me = solid.to_mesh()
